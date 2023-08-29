@@ -1,0 +1,11 @@
+# DS Store
+.DS_Store
+
+# Virtual Environment
+.venv/
+
+# Python Bytecode
+__pycache__/
+
+# VS Code
+.vscode/
