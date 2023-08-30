@@ -21,7 +21,10 @@ from langchain.document_loaders import PyPDFLoader
 from langchain.indexes import VectorstoreIndexCreator
 from langchain.prompts import ChatPromptTemplate
 from langchain.prompts.chat import SystemMessage, HumanMessagePromptTemplate
-
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import Chroma
+from langchain.vectorstores import FAISS
 
 # llm = OpenAI()
 llm = ChatOpenAI()
@@ -60,5 +63,25 @@ query = "I think Mary is a transgendered person"
 print(llm(template.format_messages(text=query)))
 # >> 'I think Mary is a transgender person.'
 
-# TODO: figure out how to combine using the template with the index
+# TODO: figure out how to combine using the template with the index (Chains? Data Augmented Generation?)
 #   Check: https://python.langchain.com/docs/use_cases/question_answering/how_to/vector_db_text_generation
+#   Check: https://python.langchain.com/docs/use_cases/question_answering/how_to/analyze_document
+#   Check: https://python.langchain.com/docs/use_cases/question_answering/how_to/multi_retrieval_qa_router
+#   Check: https://python.langchain.com/docs/modules/agents/how_to/custom_agent_with_tool_retrieval
+### Check: https://python.langchain.com/docs/use_cases/question_answering.html
+
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
+data = loader.load_and_split()
+#all_splits = text_splitter.split_documents(data)
+#vectorstore = Chroma.from_documents(documents=data, embedding=OpenAIEmbeddings())
+
+#question = "What should I say instead of crazy?"
+#docs = vectorstore.similarity_search(question)
+
+# The above results in errors. I don't think I'm combining things correctly yet
+
+# This won't work yet. Need to pip install faiss
+faiss_index = FAISS.from_documents(documents=data, embedding=OpenAIEmbeddings())
+docs = faiss_index.similarity_search("What should I say instead of crazy?")
+for doc in docs:
+    print(str(doc.metadata["page"]) + ": " + doc.page_content[:100])
