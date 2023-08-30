@@ -10,8 +10,9 @@
 # URL: https://python.langchain.com/docs/modules/data_connection/retrievers/
 # URL: https://python.langchain.com/docs/modules/data_connection/document_loaders/pdf
 # URL: https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/
+# URL: https://python.langchain.com/docs/modules/chains/
 # URL: 
-# Date Accessed: 29 Aug 2023
+# Date Accessed: 30 Aug 2023
 
 
 from langchain.llms import OpenAI
@@ -58,6 +59,6 @@ template = ChatPromptTemplate.from_messages(
 query = "I think Mary is a transgendered person"
 print(llm(template.format_messages(text=query)))
 # >> 'I think Mary is a transgender person.'
-print(llm(template.format_messages(text=query) ))
 
-# TODO: figure out how to combine using the template with the llm and the index
+# TODO: figure out how to combine using the template with the index
+#   Check: https://python.langchain.com/docs/use_cases/question_answering/how_to/vector_db_text_generation
