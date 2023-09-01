@@ -9,6 +9,7 @@
 # URL: https://python.langchain.com/docs/use_cases/question_answering/how_to/vector_db_qa
 # Date Accessed: 1 Sept 2023
 
+# Get the API key from the environment
 from environs import Env
 env = Env()
 env.read_env()
@@ -24,11 +25,11 @@ from langchain.prompts import PromptTemplate
 # Load and process the source document (single PDF for now)
 # - There are other document loaders available (e.g. HTML, text, etc.)
 loader = PyPDFLoader("https://thediversitymovement.com/wp-content/uploads/2020/11/WW-SayThis-whitepaper_201116-F.pdf")
-documents = loader.load_and_split()
+documents = loader.load_and_split()     # Returns a list of documents
 
-# Create embeddings with the source documents
-embeddings = OpenAIEmbeddings()
-docsearch = Chroma.from_documents(documents, embeddings)
+# Create vector store from the source documents
+embeddings = OpenAIEmbeddings()        # This uses the OpenAI API Key from the environment
+docsearch = Chroma.from_documents(documents, embeddings)    # Creates a vector store from the documents
 
 # Create a custom prompt to give instruction
 # - We can customize our prompt to get the best formats for our use case
@@ -44,7 +45,7 @@ chain_type_kwargs = {"prompt": PROMPT}
 
 # Create the QA retriever chain
 # - We can use other llms, different chain types/retrievers, and whatever our custom prompt is
-qa = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type="stuff", retriever=docsearch.as_retriever(), chain_type_kwargs=chain_type_kwargs, return_source_documents=True)
+qa = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type="stuff", retriever=docsearch.as_retriever(), chain_type_kwargs=chain_type_kwargs, return_source_documents=True)   # Also uses the API key
 
 # Ask a question, show the answer, and show the sources
 query = "What should I say instead of transgendered?"
@@ -52,4 +53,7 @@ result = qa({"query": query})
 print(result["result"])
 # >> "Transgender person or transgender people."
 print(result["source_documents"])
-# >> Returns the document (page) that the answer was found on as well as its metadata
+# >> Returns the document that the answer was found on as well as its metadata
+
+# May need to utilize 'Multiple Retrieval Sources'
+# URL: https://python.langchain.com/docs/use_cases/question_answering/how_to/multiple_retrieval
