@@ -17,7 +17,7 @@ env.read_env()
 from langchain.chains import RetrievalQA
 from langchain.document_loaders import PyPDFLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms import OpenAI 
+from langchain.llms import OpenAI
 from langchain.vectorstores import Chroma
 from langchain.prompts import PromptTemplate
 
@@ -33,7 +33,7 @@ docsearch = Chroma.from_documents(documents, embeddings)    # Creates a vector s
 
 # Create a custom prompt to give instruction
 # - We can customize our prompt to get the best formats for our use case
-prompt_template = """Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know. Don't try to make up the answer.
+prompt_template = """Use the following pieces of context to answer the question at the end. If you don't know the answer, just say you don't know. Don't try to make the answer up.
 {context}
 
 Question: {question}
@@ -48,12 +48,13 @@ chain_type_kwargs = {"prompt": PROMPT}
 qa = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type="stuff", retriever=docsearch.as_retriever(), chain_type_kwargs=chain_type_kwargs, return_source_documents=True)   # Also uses the API key
 
 # Ask a question, show the answer, and show the sources
-query = "What should I say instead of transgendered?"
+text = "I think Mary is transgenered."
+query = f"How should the following be rewritten? {text}"
+
 result = qa({"query": query})
+
 print(result["result"])
-# >> "Transgender person or transgender people."
+# >> "I think Mary is transgender."
+
 print(result["source_documents"])
 # >> Returns the document that the answer was found on as well as its metadata
-
-# May need to utilize 'Multiple Retrieval Sources'
-# URL: https://python.langchain.com/docs/use_cases/question_answering/how_to/multiple_retrieval
