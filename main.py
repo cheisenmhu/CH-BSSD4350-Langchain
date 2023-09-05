@@ -54,7 +54,7 @@ query = f"How should the following be rewritten to be more inclusive? {text}"
 result = qa({"query": query})
 
 print(result["result"])
-# >> "I think Mary is transgender."
+# >> "I think Mary is transgender." (still isn't perfect, because you shouldn't gossip about someone's gender identity. But it's progress.)
 
 print(result["source_documents"])
 # >> Returns the document that the answer was found on as well as its metadata
