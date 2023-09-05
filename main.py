@@ -49,7 +49,7 @@ qa = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type="stuff", retriever=doc
 
 # Ask a question, show the answer, and show the sources
 text = "I think Mary is transgenered."
-query = f"How should the following be rewritten? {text}"
+query = f"How should the following be rewritten to be more inclusive? {text}"
 
 result = qa({"query": query})
 
